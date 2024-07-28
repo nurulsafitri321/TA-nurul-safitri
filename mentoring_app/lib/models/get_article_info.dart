@@ -21,12 +21,12 @@ class ArticleInfo {
   // Named constructor for creating an instance from JSON
   ArticleInfo.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        article_content = json['article_content'],
-        title = json['title'],
-        description = json['description'],
-        created_at = json['created_at'],
-        img = json['img'],
-        author = json['author'];
+        article_content = json['article_content'] ?? '', // Provide default value
+        title = json['title'] ?? '', // Provide default value
+        description = json['description'] ?? '', // Provide default value
+        created_at = json['created_at'] ?? '', // Provide default value
+        img = json['img'] ?? '', // Provide default value
+        author = json['author'] ?? ''; // Provide default value
 
   // Method to convert instance to JSON
   Map<String, dynamic> toJson() {

@@ -72,14 +72,14 @@ class _AllBooksState extends State<AllBooks> {
                     constraints: BoxConstraints(),
                     icon:
 
-                Icon(Icons.arrow_back_ios, color:Color(0xFF363f93)),
+                Icon(Icons.arrow_back_ios, color:Color.fromARGB(255, 51, 148, 91)),
                     onPressed:()=> Navigator.pop(context)),
                 IconButton(
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                     icon:
 
-                Icon(Icons.home_outlined, color:Color(0xFF363f93)),
+                Icon(Icons.home_outlined, color:Color.fromARGB(255, 51, 148, 91)),
                     onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ArticlePage()))),
               ],
             ),
@@ -139,7 +139,7 @@ class _AllBooksState extends State<AllBooks> {
                                           borderRadius:BorderRadius.circular(10.0),
                                           image:  DecorationImage(
                                             fit:BoxFit.fill,
-                                            image:NetworkImage("http://mark.dbestech.com/uploads/"+article.img),
+                                            image:NetworkImage("http://10.0.2.2:8000/uploads/"+article.img),
                                           ),
                                         )
 
@@ -180,13 +180,12 @@ class _AllBooksState extends State<AllBooks> {
                         )
                         )
                     );
-    }).toList(),
-          ),
-
-        ),
-      ),
-        ],
-      )
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+          )
         ),
       )
     );

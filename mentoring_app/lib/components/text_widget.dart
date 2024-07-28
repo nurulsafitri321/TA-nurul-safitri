@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class TextWidget extends StatelessWidget {
   final String text;
@@ -11,7 +12,7 @@ class TextWidget extends StatelessWidget {
     required this.text,
     this.fontSize = 14, // Provide a default value
     this.isUnderLine = false,
-    this.color = const Color(0xFF363f93),
+    this.color = const Color.fromARGB(255, 51, 148, 91),
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class TextWidget extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           border: Border(bottom: BorderSide(
-            color: isUnderLine?Color(0xFF363f93):Color(0xFFffffff),  // Text colour here
+            color: isUnderLine?Color.fromARGB(255, 213, 216, 12):Color(0xFFffffff),  // Text colour here
             width: 1.0, // Underline width
           ))
       ),

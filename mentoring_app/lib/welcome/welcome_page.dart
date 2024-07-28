@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:mentoring_app/api/my_api.dart';
 import 'package:mentoring_app/auth/auth_page.dart';
 import 'package:mentoring_app/models/get_article_info.dart';
+import 'package:mentoring_app/singup_login/sign_in.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -13,8 +16,8 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   var articles = <ArticleInfo>[];
-  final _totalDots = 3;
-  double _currentPosition = 0.0;
+  var _totalDots = 1;
+  int _currentPosition = 0;
 
   @override
   void initState() {
@@ -22,13 +25,13 @@ class _WelcomePageState extends State<WelcomePage> {
     _initData();
   }
 
-  double _validPosition(double position) {
-    if (position >= _totalDots) return _totalDots - 1.0;
-    if (position < 0) return 0.0;
+  int _validPosition(int position) {
+    if (position >= _totalDots) return _totalDots - 1;
+    if (position < 0) return 0;
     return position;
   }
 
-  void _updatePosition(double position) {
+  void _updatePosition(int position) {
     setState(() {
       _currentPosition = _validPosition(position);
     });
@@ -45,61 +48,76 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   String getCurrentPositionPretty() {
-    return (_currentPosition + 1.0).toStringAsPrecision(2);
+    return (_currentPosition + 1).toStringAsPrecision(2);
   }
 
+  // Future<void> _initData() async {
+  //   CallApi().getPublicData("welcomeinfo").then((response) {
+  //     setState(() {
+  //       Iterable list = json.decode(response.body);
+  //       articles = list.map((model) => ArticleInfo.fromJson(model)).toList();
+  //     });
+  //   });
+  // }
+
   Future<void> _initData() async {
-    CallApi().getPublicData("welcomeinfo").then((response) {
-      setState(() {
-        // Iterable list = json.decode(response.body);
-        // articles = list.map((model) => ArticleInfo.fromJson(model)).toList();
-      });
+  var response = await CallApi().getPublicData("welcomeinfo");
+  if (response != null && response.statusCode == 200) {
+    setState(() {
+      print(response.body);  // Lihat response body di console
+      Iterable list = json.decode(response.body);
+      articles = list.map((model) => ArticleInfo.fromJson(model)).toList();
+      _totalDots=articles.length;
+      print(articles);  // Lihat daftar artikel yang dihasilkan
     });
+  } else {
+    print('Failed to load articles');
   }
+}
+
 
   void _onPageChanged(int index) {
     setState(() {
-      _currentPosition = index.toDouble();
+      _currentPosition = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF333d94),
+      backgroundColor: Color.fromARGB(255, 51, 148, 91),
       body: Column(
         children: [
           Container(
             height: MediaQuery.of(context).size.height / 2,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("img/logo.png"),
-                fit: BoxFit.fill,
-              ),
+            width: MediaQuery.of(context).size.width / 2,  // Atur ukuran sesuai kebutuhan Anda
+            child: Image.asset(
+              "img/logo.png",
+              fit: BoxFit.contain,  // Mengubah ukuran gambar agar tetap sesuai dengan kontainer
             ),
           ),
           _buildRow([
             DotsIndicator(
               dotsCount: _totalDots,
-              position: _currentPosition,
+              position: _currentPosition.toInt(),
               axis: Axis.horizontal,
               decorator: DotsDecorator(
-                size: const Size.square(9.0),
-                activeSize: const Size(18.0, 9.0),
+                size: Size.square(9.0),
+                activeSize: Size(18.0, 9.0),
                 activeShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
               ),
               onTap: (pos) {
                 setState(() {
-                  _currentPosition = pos;
+                  _currentPosition = pos.toInt();
                 });
               },
             ),
           ]),
           Container(
             height: 180,
-            color: Color(0xFF333d94),
+            color: Color.fromARGB(255, 51, 148, 91),
             child: PageView.builder(
               onPageChanged: _onPageChanged,
               controller: PageController(viewportFraction: 1.0),
@@ -112,7 +130,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   margin: const EdgeInsets.only(right: 10),
                   child: Text(
                     articles[i].article_content ?? "Nothing",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: "Avenir",
@@ -127,24 +145,24 @@ class _WelcomePageState extends State<WelcomePage> {
             child: Stack(
               children: [
                 Positioned(
-                  height: 80,
-                  bottom: 80,
+                  height: 60,
+                  bottom: 50,
                   left: (MediaQuery.of(context).size.width - 200) / 2,
                   right: (MediaQuery.of(context).size.width - 200) / 2,
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AuthPage()),
+                        MaterialPageRoute(builder: (context) => SignIn()),
                       );
                     },
                     child: Container(
                       height: 80,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: Color(0xFF7179ed),
+                        color: Color.fromARGB(255, 164, 175, 2),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Get Started',
                           style: TextStyle(

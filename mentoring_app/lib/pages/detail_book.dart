@@ -28,7 +28,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
         leading: IconButton(
           padding: EdgeInsets.zero,
           constraints: BoxConstraints(),
-          icon: Icon(Icons.arrow_back_ios, color: Color(0xFF363f93)),
+          icon: Icon(Icons.arrow_back_ios, color: Color.fromARGB(255, 51, 148, 91)),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -58,7 +58,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
                         ],
                         image: DecorationImage(
                           image: NetworkImage(
-                            "http://mark.dbestech.com/uploads/" + widget.articleInfo.img,
+                            "http://192.168.95.167:8000/uploads/" + widget.articleInfo.img,
                           ),
                           fit: BoxFit.fill,
                         ),
