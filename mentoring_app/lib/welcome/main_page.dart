@@ -53,7 +53,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.green,
         onTap: (index) {
           print('BottomNavigationBar tapped, index: $index'); // Debug print
           _onItemTapped(index);
