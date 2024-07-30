@@ -51,30 +51,20 @@ class _WelcomePageState extends State<WelcomePage> {
     return (_currentPosition + 1).toStringAsPrecision(2);
   }
 
-  // Future<void> _initData() async {
-  //   CallApi().getPublicData("welcomeinfo").then((response) {
-  //     setState(() {
-  //       Iterable list = json.decode(response.body);
-  //       articles = list.map((model) => ArticleInfo.fromJson(model)).toList();
-  //     });
-  //   });
-  // }
-
   Future<void> _initData() async {
-  var response = await CallApi().getPublicData("welcomeinfo");
-  if (response != null && response.statusCode == 200) {
-    setState(() {
-      print(response.body);  // Lihat response body di console
-      Iterable list = json.decode(response.body);
-      articles = list.map((model) => ArticleInfo.fromJson(model)).toList();
-      _totalDots=articles.length;
-      print(articles);  // Lihat daftar artikel yang dihasilkan
-    });
-  } else {
-    print('Failed to load articles');
+    var response = await CallApi().getPublicData("welcomeinfo");
+    if (response != null && response.statusCode == 200) {
+      setState(() {
+        print(response.body);  // Lihat response body di console
+        Iterable list = json.decode(response.body);
+        articles = list.map((model) => ArticleInfo.fromJson(model)).toList();
+        _totalDots = articles.length;
+        print(articles);  // Lihat daftar artikel yang dihasilkan
+      });
+    } else {
+      print('Failed to load articles');
+    }
   }
-}
-
 
   void _onPageChanged(int index) {
     setState(() {
@@ -86,98 +76,101 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 51, 148, 91),
-      body: Column(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height / 2,
-            width: MediaQuery.of(context).size.width / 2,  // Atur ukuran sesuai kebutuhan Anda
-            child: Image.asset(
-              "img/logo.png",
-              fit: BoxFit.contain,  // Mengubah ukuran gambar agar tetap sesuai dengan kontainer
-            ),
-          ),
-          _buildRow([
-            DotsIndicator(
-              dotsCount: _totalDots,
-              position: _currentPosition.toInt(),
-              axis: Axis.horizontal,
-              decorator: DotsDecorator(
-                size: Size.square(9.0),
-                activeSize: Size(18.0, 9.0),
-                activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
+      body: SingleChildScrollView( // Tambahkan SingleChildScrollView di sini
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.width / 2,  // Atur ukuran sesuai kebutuhan Anda
+              child: Image.asset(
+                "img/logo.png",
+                fit: BoxFit.contain,  // Mengubah ukuran gambar agar tetap sesuai dengan kontainer
               ),
-              onTap: (pos) {
-                setState(() {
-                  _currentPosition = pos.toInt();
-                });
-              },
             ),
-          ]),
-          Container(
-            height: 180,
-            color: Color.fromARGB(255, 51, 148, 91),
-            child: PageView.builder(
-              onPageChanged: _onPageChanged,
-              controller: PageController(viewportFraction: 1.0),
-              itemCount: articles.isEmpty ? 0 : articles.length,
-              itemBuilder: (_, i) {
-                return Container(
-                  height: 180,
-                  padding: const EdgeInsets.only(top: 50, left: 50, right: 50),
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(right: 10),
-                  child: Text(
-                    articles[i].article_content ?? "Nothing",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: "Avenir",
-                      fontWeight: FontWeight.bold,
-                    ),
+            _buildRow([
+              DotsIndicator(
+                dotsCount: _totalDots,
+                position: _currentPosition.toInt(),
+                axis: Axis.horizontal,
+                decorator: DotsDecorator(
+                  size: Size.square(9.0),
+                  activeSize: Size(18.0, 9.0),
+                  activeShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
-                );
-              },
-            ),
-          ),
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned(
-                  height: 60,
-                  bottom: 50,
-                  left: (MediaQuery.of(context).size.width - 200) / 2,
-                  right: (MediaQuery.of(context).size.width - 200) / 2,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignIn()),
-                      );
-                    },
-                    child: Container(
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Color.fromARGB(255, 164, 175, 2),
+                ),
+                onTap: (pos) {
+                  setState(() {
+                    _currentPosition = pos.toInt();
+                  });
+                },
+              ),
+            ]),
+            Container(
+              height: 180,
+              color: Color.fromARGB(255, 51, 148, 91),
+              child: PageView.builder(
+                onPageChanged: _onPageChanged,
+                controller: PageController(viewportFraction: 1.0),
+                itemCount: articles.isEmpty ? 0 : articles.length,
+                itemBuilder: (_, i) {
+                  return Container(
+                    height: 180,
+                    padding: const EdgeInsets.only(top: 50, left: 50, right: 50),
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(right: 10),
+                    child: Text(
+                      articles[i].article_content ?? "Nothing",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: "Avenir",
+                        fontWeight: FontWeight.bold,
                       ),
-                      child: const Center(
-                        child: Text(
-                          'Get Started',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 26,
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 4, // Atur ukuran sesuai kebutuhan Anda
+              child: Stack(
+                children: [
+                  Positioned(
+                    height: 60,
+                    bottom: 50,
+                    left: (MediaQuery.of(context).size.width - 200) / 2,
+                    right: (MediaQuery.of(context).size.width - 200) / 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignIn()),
+                        );
+                      },
+                      child: Container(
+                        height: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Color.fromARGB(255, 164, 175, 2),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Get Started',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 26,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

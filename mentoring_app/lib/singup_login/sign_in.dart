@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mentoring_app/api/my_api.dart';
 import 'package:mentoring_app/components/text_widget.dart';
-import 'package:mentoring_app/pages/article_page.dart';
 import 'package:mentoring_app/singup_login/sign_up.dart';
-import 'package:mentoring_app/welcome/home_page.dart';
+import 'package:mentoring_app/welcome/main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
@@ -54,7 +53,7 @@ class _SignInState extends State<SignIn> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ArticlePage(),
+          builder: (context) => MainPage(),
         ),
       );
     } else {

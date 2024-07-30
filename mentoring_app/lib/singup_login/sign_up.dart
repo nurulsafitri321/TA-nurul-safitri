@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mentoring_app/api/my_api.dart';
 import 'package:mentoring_app/components/text_widget.dart';
-import 'package:mentoring_app/pages/article_page.dart';
+import 'package:mentoring_app/singup_login/sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatefulWidget {
@@ -56,7 +56,7 @@ class _SignUpState extends State<SignUp> {
       Navigator.push(
         context,
         new MaterialPageRoute(
-          builder: (context) => ArticlePage(),
+          builder: (context) => SignIn(),
         ),
       );
     } else {

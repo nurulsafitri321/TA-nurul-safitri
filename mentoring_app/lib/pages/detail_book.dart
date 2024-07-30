@@ -58,7 +58,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
                         ],
                         image: DecorationImage(
                           image: NetworkImage(
-                            "http://192.168.95.167:8000/uploads/" + widget.articleInfo.img,
+                            "http://10.0.2.2:8000/uploads/" + widget.articleInfo.img,
                           ),
                           fit: BoxFit.fill,
                         ),
