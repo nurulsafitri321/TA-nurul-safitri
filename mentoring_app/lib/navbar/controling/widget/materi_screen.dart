@@ -66,7 +66,7 @@ class _MateriScreenState extends State<MateriScreen> {
           'Materi',
           style: TextStyle(color: Colors.white), // Ubah warna teks menjadi putih
         ),
-        backgroundColor: Color.fromARGB(255, 128, 167, 131),
+        backgroundColor: Color.fromARGB(255, 51, 148, 91),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -75,7 +75,7 @@ class _MateriScreenState extends State<MateriScreen> {
         ),
       ),
       body: Container(
-        color: Color(0xFFE8F5E9), // Warna hijau soft pada body
+        color: Color.fromARGB(255, 255, 255, 255), // Warna hijau soft pada body
         child: ListView.builder(
           itemCount: _tasks.length,
           itemBuilder: (context, index) {

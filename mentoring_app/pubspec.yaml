@@ -39,6 +39,13 @@ dependencies:
   shared_preferences: ^2.2.3
   dots_indicator: ^3.0.0
   flutter_typeahead: ^5.2.0
+  table_calendar: ^3.1.2
+  pdf: ^3.11.0
+  url_launcher: ^6.0.20
+  email_validator: ^3.0.0
+  image_picker: ^0.8.4+4
+  provider: ^6.1.2
+
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +72,16 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - img/
+    - img/pdf/book1.pdf
+    - img/pdf/book2.pdf
+    - img/pdf/book3.pdf
+    - img/pdf/book4.pdf
+    - img/pdf/book5.pdf
+    - img/pdf/book6.pdf
+    - img/pdf/book7.pdf
+    - img/pdf/book8.pdf
+    - img/pdf/book9.pdf
+    - img/pdf/book10.pdf
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -96,36 +96,36 @@ class _DetailBookPageState extends State<DetailBookPage> {
             SizedBox(height: 40),
             Divider(color: Color(0xFF7b8ea3)),
             SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.only(right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.favorite, color: Color(0xFF7b8ea3), size: 40),
-                      SizedBox(width: 10),
-                      TextWidget(text: "Like", fontSize: 20),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.share, color: Color(0xFF7b8ea3), size: 40),
-                      SizedBox(width: 10),
-                      TextWidget(text: "Share", fontSize: 20),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.bookmarks_sharp, color: Color(0xFF7b8ea3), size: 40),
-                      SizedBox(width: 10),
-                      TextWidget(text: "Bookself", fontSize: 20),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 40),
+            // Container(
+            //   padding: const EdgeInsets.only(right: 20),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Row(
+            //         children: <Widget>[
+            //           Icon(Icons.favorite, color: Color(0xFF7b8ea3), size: 40),
+            //           SizedBox(width: 10),
+            //           TextWidget(text: "Like", fontSize: 20),
+            //         ],
+            //       ),
+            //       Row(
+            //         children: <Widget>[
+            //           Icon(Icons.share, color: Color(0xFF7b8ea3), size: 40),
+            //           SizedBox(width: 10),
+            //           TextWidget(text: "Share", fontSize: 20),
+            //         ],
+            //       ),
+            //       Row(
+            //         children: <Widget>[
+            //           Icon(Icons.bookmarks_sharp, color: Color(0xFF7b8ea3), size: 40),
+            //           SizedBox(width: 10),
+            //           TextWidget(text: "Bookself", fontSize: 20),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            SizedBox(height: 5),
             Row(
               children: [
                 TextWidget(
@@ -138,10 +138,15 @@ class _DetailBookPageState extends State<DetailBookPage> {
             SizedBox(height: 30),
             Container(
               height: 200,
-              child: TextWidget(
-                text: widget.articleInfo.article_content,
-                fontSize: 16,
-                color: Colors.grey,
+              child: SingleChildScrollView(
+                child: Text(
+                  widget.articleInfo.article_content,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: const Color.fromARGB(255, 110, 100, 100),
+                  ),
+                  textAlign: TextAlign.justify, // Menambahkan justifikasi
+                ),
               ),
             ),
             Divider(color: Color(0xFF7b8ea3)),
@@ -170,6 +175,16 @@ class _DetailBookPageState extends State<DetailBookPage> {
               ),
             ),
             Divider(color: Color(0xFF7b8ea3)),
+            SizedBox(height: 30), // Jarak antara elemen
+            ElevatedButton(
+              onPressed: () {
+                // Tambahkan logika untuk membuka PDF atau melakukan tindakan lain
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 54, 141, 57), // Warna teks putih
+              ),
+              child: Text("Baca"),
+            ),
           ],
         ),
       ),

@@ -3,7 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:mentoring_app/api/my_api.dart';
 import 'package:mentoring_app/components/text_widget.dart';
 import 'package:mentoring_app/models/get_article_info.dart';
+import 'package:mentoring_app/navbar/controling/widget/amal_yaumi_screen.dart';
+import 'package:mentoring_app/navbar/controling/widget/hafalan_screen.dart';
+import 'package:mentoring_app/navbar/controling/widget/materi_screen.dart';
+import 'package:mentoring_app/navbar/controling/widget/presesnsi_screen.dart';
+import 'package:mentoring_app/navbar/controling/widget/ujian_mentoring.dart';
 import 'package:mentoring_app/pages/detail_book.dart';
+import 'package:mentoring_app/pages/widgets/CalendarWidget.dart';
+import 'package:mentoring_app/pages/widgets/CircleButton.dart';
+import 'package:mentoring_app/pages/widgets/DashedLInedPainter.dart';
+import 'package:mentoring_app/pages/widgets/data_group_mentoring.dart';
+import 'package:mentoring_app/pages/widgets/data_mente.dart';
+import 'package:mentoring_app/pages/widgets/data_mentor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ArticlePage extends StatefulWidget {
@@ -31,16 +42,6 @@ class _ArticlePageState extends State<ArticlePage> {
   }
 
   _initData() async {
-    await CallApi().getPublicData("recommendedarticles").then((response) {
-      if (response != null && response.body != null) {
-        setState(() {
-          Iterable list = json.decode(response.body);
-          articles = list.map((model) => ArticleInfo.fromJson(model)).toList();
-        });
-      } else {
-        print('Response is null');
-      }
-    });
     await CallApi().getPublicData("allarticles").then((response) {
       if (response != null && response.body != null) {
         setState(() {
@@ -61,253 +62,414 @@ class _ArticlePageState extends State<ArticlePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 30,
-        backgroundColor: Color(0xFFffffff),
-        elevation: 0.0,
+      backgroundColor: Color(0xFFffffff),
+      elevation: 0.0,
+      automaticallyImplyLeading: false,
+      toolbarHeight: 75,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              "Selamat Datang, \nMentor Lrai Pnp !",
+              style: TextStyle(
+                color: Color.fromARGB(255, 51, 148, 91),
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(width: 15), // Jarak antara teks dan logo
+          Image.asset(
+            'img/lrai.png',
+            height: 70,
+          ),
+        ],
       ),
+    ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: height * 0.02),
+            CustomPaint(
+              size: Size(double.infinity, 1),
+              painter: DashedLinePainter(),
+            ),
+            SizedBox(height: height * 0.02),
             Container(
-              padding: const EdgeInsets.only(left: 20, right: 30),
+              padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.menu_book_sharp, color: Color.fromARGB(255, 51, 148, 91)),
-                  Icon(Icons.menu, color: Color.fromARGB(255, 51, 148, 91))
-                ],
-              ),
-            ),
-            SizedBox(
-              height: height * 0.02,
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                children: [
                   TextWidget(
-                    text: "Today",
-                    fontSize: 36,
+                    text: "Pengelolaan Mentoring", 
+                    fontSize: 20, 
+                    color: Color.fromARGB(255, 51, 148, 91),
                   ),
-                  Expanded(child: Container()),
                 ],
               ),
             ),
-            SizedBox(
-              height: height * 0.02,
-            ),
+          
             Container(
-                height: 80,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SearchBar(),
-                )),
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  TextWidget(
-                      text: "view all", fontSize: 16, color: Color.fromARGB(255, 51, 148, 91)),
-                  IconButton(
-                      icon: Icon(Icons.arrow_back_ios_new_outlined,
-                          color: Color.fromARGB(255, 51, 148, 91)),
-                      onPressed: () {})
+                  CircleButton(
+                    icon: Icons.calendar_today,
+                    label: 'Kehadiran',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PresensiScreen()),
+                      );
+                    },
+                  ),
+                  CircleButton(
+                    icon: Icons.book,
+                    label: 'Materi',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MateriScreen()),
+                      );
+                    },
+                  ),
+                  CircleButton(
+                    icon: Icons.favorite,
+                    label: 'Amal Yaumi',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AmalYaumiScreen()),
+                      );
+                    },
+                  ),
+                  CircleButton(
+                    icon: Icons.memory,
+                    label: 'Hafalan',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HafalanScreen()),
+                      );
+                    },
+                  ),
+                  CircleButton(
+                    icon: Icons.school,
+                    label: 'Ujian',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UjianMentoring()),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
-            SizedBox(
-              height: height * 0.02,
+            SizedBox(height: height * 0.02),
+            CustomPaint(
+              size: Size(double.infinity, 1),
+              painter: DashedLinePainter(),
             ),
+            SizedBox(height: height * 0.02),
             Container(
-                height: height * 0.27,
-                child: PageView.builder(
-                  controller: PageController(viewportFraction: .9),
-                  itemCount: articles.isEmpty ? 0 : articles.length,
-                  itemBuilder: (_, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        debugPrint(i.toString());
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailBookPage(
-                                articleInfo: articles[i], index: i),
-                          ),
-                        );
-                      },
-                      child: articles.isEmpty
-                          ? CircularProgressIndicator()
-                          : Stack(
-                              children: [
-                                Positioned(
-                                    top: 35,
-                                    child: Material(
-                                      elevation: 0.0,
-                                      child: Container(
-                                        height: 180.0,
-                                        width: width * 0.85,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(0.0),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color:
-                                                    Colors.grey.withOpacity(0.3),
-                                                offset: Offset(-10.0, 0.0),
-                                                blurRadius: 20.0,
-                                                spreadRadius: 4.0),
-                                          ],
-                                        ),
-                                      ),
-                                    )),
-                                Positioned(
-                                  top: 0,
-                                  left: 10,
-                                  child: Card(
-                                    elevation: 10.0,
-                                    shadowColor: Colors.grey.withOpacity(0.5),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: Container(
-                                      height: 200,
-                                      width: width * 0.85,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: Image.network(
-                                        "http://10.0.2.2:8000/uploads/" +
-                                            (articles[i].img ?? 'default_image.jpg'),
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                          return Text('Failed to load image');
-                                        },
-                                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              value: loadingProgress.expectedTotalBytes != null
-                                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 45,
-                                  left: width * 0.4,
-                                  child: Container(
-                                    height: 200,
-                                    width: 150,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextWidget(
-                                          text: articles[i].title,
-                                          fontSize: 20,
-                                        ),
-                                        TextWidget(
-                                            color: Colors.grey,
-                                            text: articles[i].author == null
-                                                ? "Unknown"
-                                                : articles[i].author,
-                                            fontSize: 16),
-                                        Divider(color: Colors.black),
-                                        TextWidget(
-                                            text: articles[i].description ?? '',
-                                            fontSize: 16,
-                                            color: Colors.grey),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+            padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextWidget(
+                  text: "Sekilas Tentang Materi",
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 51, 148, 91),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: height * 0.01), // Kurangi jarak di sini
+          Container(
+            height: height * 0.3,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: allarticles.isEmpty ? 0 : allarticles.length,
+              itemBuilder: (_, i) {
+                return GestureDetector(
+                  onTap: () {
+                    debugPrint(i.toString());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailBookPage(
+                          articleInfo: allarticles[i],
+                          index: i,
+                        ),
+                      ),
                     );
                   },
-                )),
-            SizedBox(
-              height: height * 0.02,
-            ),
-            Container(
-              height: height * 0.4,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allarticles.isEmpty ? 0 : allarticles.length,
-                  itemBuilder: (_, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        debugPrint(i.toString());
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailBookPage(
-                              articleInfo: allarticles[i],
-                              index: i,
-                            ),
+                  child: allarticles.isEmpty
+                      ? CircularProgressIndicator()
+                      : Container(
+                          width: 150,
+                          margin: const EdgeInsets.only(left: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Card(
+                                semanticContainer: true,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                child: Image.network(
+                                  "http://10.0.2.2:8000/uploads/" +
+                                      (allarticles[i].img ?? 'default_image.png'),
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                    return Text('Failed to load image');
+                                  },
+                                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress.expectedTotalBytes != null
+                                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              TextWidget(
+                                text: allarticles[i].title,
+                                fontSize: 15,
+                              ),
+                              TextWidget(
+                                text: allarticles[i].author == null
+                                    ? "Author: Unknown"
+                                    : "Author: " + allarticles[i].author,
+                                fontSize: 14,
+                                color: Color(0xFFa9b3bd),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                      child: allarticles.isEmpty
-                          ? CircularProgressIndicator()
-                          : Container(
-                              width: 150,
-                              margin: const EdgeInsets.only(left: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Card(
-                                    semanticContainer: true,
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    child: Image.network(
-                                      "http://10.0.2.2:8000/uploads/" +
-                                          (allarticles[i].img ?? 'default_image.png'),
-                                      fit: BoxFit.contain,
-                                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                        return Text('Failed to load image');
-                                      },
-                                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            value: loadingProgress.expectedTotalBytes != null
-                                                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  TextWidget(
-                                    text: allarticles[i].title,
-                                    fontSize: 20,
-                                  ),
-                                  TextWidget(
-                                      text: allarticles[i].author == null
-                                          ? "Author: Unknown"
-                                          : "Author: " + allarticles[i].author,
-                                      fontSize: 16,
-                                      color: Color(0xFFa9b3bd)),
-                                ],
+                        ),
+                );
+              },
+            ),
+          ),
+          CustomPaint(
+            size: Size(double.infinity, 1),
+            painter: DashedLinePainter(),
+          ),
+          SizedBox(height: height * 0.02), // Kurangi jarak di sini
+          Container(
+            padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextWidget(
+                  text: "Data Mentoring",
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 51, 148, 91),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: height * 0.02),
+          Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Card(
+                      color: Color.fromARGB(255, 51, 148, 91),
+                      shadowColor: Colors.grey.withOpacity(0.9),
+                      elevation: 7,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Data Mentor',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
-                    );
-                  }),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DataMentorPage(),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  shadowColor: Colors.grey.withOpacity(0.5),
+                                  minimumSize: Size(30, 30),
+                                ),
+                                child: Text(
+                                  'Klik',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Card(
+                      color: Color.fromARGB(255, 51, 148, 91),
+                      shadowColor: Colors.grey.withOpacity(0.9),
+                      elevation: 7,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Data Mente',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DataMenteePage(),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  shadowColor: Colors.grey.withOpacity(0.5),
+                                  minimumSize: Size(30, 30),
+                                ),
+                                child: Text(
+                                  'Klik',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: height * 0.02),
+              Card(
+                color: Color.fromARGB(255, 51, 148, 91),
+                shadowColor: Colors.grey.withOpacity(0.9),
+                elevation: 7,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Data Group Mentoring',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DataGroupMentorPage(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 252, 252, 252),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            shadowColor: Colors.grey.withOpacity(0.5),
+                            minimumSize: Size(30, 30),
+                          ),
+                          child: Text(
+                            'Klik',
+                            style: TextStyle(color: Colors.green),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: height * 0.03),
+        CustomPaint(
+            size: Size(double.infinity, 1),
+            painter: DashedLinePainter(),
+          ),
+          SizedBox(height: height * 0.02),
+          Container(
+            padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextWidget(
+                  text: "Kalender",
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 51, 148, 91),
+                ),
+              ],
             ),
+          ),
+          SizedBox(height: height * 0.02),
+          Container(
+              height: height * 0.7, // Berikan tinggi tetap pada container kalender
+              child: CalendarWidget(), // Menambahkan CalendarWidget di sini
+            ),
+          SizedBox(height: height * 0.02),
           ],
         ),
       ),
     );
   }
 }
+

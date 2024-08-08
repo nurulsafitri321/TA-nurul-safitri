@@ -70,7 +70,7 @@ class _AmalYaumiScreenState extends State<AmalYaumiScreen> {
           'Amal Yaumi',
           style: TextStyle(color: Colors.white), 
         ),
-        backgroundColor: Color.fromARGB(255, 128, 167, 131),
+        backgroundColor: Color.fromARGB(255, 51, 148, 91),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -79,7 +79,7 @@ class _AmalYaumiScreenState extends State<AmalYaumiScreen> {
         ),
       ),
       body: Container(
-        color: Color(0xFFE8F5E9), // Warna hijau soft pada body
+        color: Color.fromARGB(255, 255, 255, 255), // Warna hijau soft pada body
         child: ListView.builder(
           itemCount: 4, // 
           itemBuilder: (context, index) {

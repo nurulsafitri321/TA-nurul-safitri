@@ -14,7 +14,6 @@ class _AuthPageState extends State<AuthPage> {
   bool _isLoggedIn=false;
   @override
   void initState() {
-    // TODO: implement initState
     _checkLoginStatus();
     super.initState();
   }

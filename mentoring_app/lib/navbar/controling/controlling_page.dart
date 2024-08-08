@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mentoring_app/components/text_widget.dart';
+import 'package:mentoring_app/models/user_provider.dart';
 import 'package:mentoring_app/navbar/controling/widget/Amal_Yaumi_screen.dart';
+import 'package:mentoring_app/navbar/controling/widget/evaluasi_screen.dart';
 import 'package:mentoring_app/navbar/controling/widget/hafalan_screen.dart';
 import 'package:mentoring_app/navbar/controling/widget/materi_screen.dart';
 import 'package:mentoring_app/navbar/controling/widget/presesnsi_screen.dart';
 import 'package:mentoring_app/navbar/controling/widget/ujian_mentoring.dart';
+import 'package:mentoring_app/pages/widgets/DashedLInedPainter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class ControllerPage extends StatefulWidget {
   const ControllerPage({super.key});
@@ -40,11 +45,22 @@ class _ControllerPageState extends State<ControllerPage> {
     _loadSavedData();
   }
 
+  void _showNotification() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Semoga Allah mudahkan jalan mu di setiap langkah!"),
+        backgroundColor: Colors.green, // Mengubah warna latar belakang notifikasi
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Controlling Mentoring"),
+        title: Text("Pengelolaan Mentoring"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -52,7 +68,7 @@ class _ControllerPageState extends State<ControllerPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
-              color: Colors.white,
+              color: Color.fromARGB(255, 51, 148, 91),
               shadowColor: Colors.grey,
               elevation: 4,
               shape: RoundedRectangleBorder(
@@ -60,13 +76,30 @@ class _ControllerPageState extends State<ControllerPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "Halo Mentor Tangguh! Ayo lanjutkan progres kelompok mentoringnya :)",
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Column(
+                  children: [
+                    Text(
+                      "Hallo ${user?.name ?? 'Mentor'}! Ayo lanjutkan progres kelompok mentoringnya :)",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.bottomRight, // Mengatur posisi tombol
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _showNotification();
+                        },
+                        child: Text("OK"),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: const Color.fromARGB(255, 51, 148, 91), backgroundColor: Colors.white, // Mengubah warna teks tombol
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -74,9 +107,13 @@ class _ControllerPageState extends State<ControllerPage> {
             TextField(
               controller: _groupNameController,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green), // Mengubah warna garis tepi
+                ),
                 labelText: "Silahkan isi nama kelompok mentoring",
                 hintText: "25 | ummu Darda",
+                filled: false,
+                //fillColor: Colors.white, // Mengubah warna latar belakang field
               ),
             ),
             SizedBox(height: 20),
@@ -99,19 +136,43 @@ class _ControllerPageState extends State<ControllerPage> {
               },
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _saveData,
-              child: Text("Save Data"),
+            Align(
+              alignment: Alignment.centerRight, // Mengatur posisi tombol Save
+              child: ElevatedButton(
+                onPressed: _saveData,
+                child: Text("Simpan"),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 51, 148, 91), // Mengubah warna teks tombol
+                ),
+              ),
             ),
             if (_savedGroupName != null && _savedGender != null) ...[
               SizedBox(height: 20),
               Text(
-                "Saved Data:",
+                "Data Kelompok:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Text("Nama Kelompok: $_savedGroupName"),
               Text("Gender: $_savedGender"),
             ],
+             SizedBox(height: 10),
+            CustomPaint(
+              size: Size(double.infinity, 1),
+              painter: DashedLinePainter(),
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextWidget(
+                    text: "Progres Aktivitas Mentoring", 
+                    fontSize: 20, 
+                    color: Color.fromARGB(255, 51, 148, 91),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 20),
             GridView.count(
               shrinkWrap: true,
@@ -126,6 +187,7 @@ class _ControllerPageState extends State<ControllerPage> {
                 _buildButton(context, "3. Amal Yaumi", AmalYaumiScreen()),
                 _buildButton(context, "4. Hafalan Surah Pendek", HafalanScreen()),
                 _buildButton(context, "5. Ujian Mentoring", UjianMentoring()),
+                _buildButton(context, "6. Evaluasi Mentoring", EvaluasiScreen()),
               ],
             ),
           ],
@@ -155,7 +217,7 @@ class _ControllerPageState extends State<ControllerPage> {
           child: Text(
             label,
             style: TextStyle(
-              color: Colors.green,
+              color: const Color.fromARGB(255, 51, 148, 91),
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),

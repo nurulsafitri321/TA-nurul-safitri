@@ -26,7 +26,9 @@ class ArticleInfo {
         description = json['description'] ?? '', // Provide default value
         created_at = json['created_at'] ?? '', // Provide default value
         img = json['img'] ?? '', // Provide default value
-        author = json['author'] ?? ''; // Provide default value
+        author = json['author'] ?? '';
+
+  String? get imageUrl => null; // Provide default value
 
   // Method to convert instance to JSON
   Map<String, dynamic> toJson() {
