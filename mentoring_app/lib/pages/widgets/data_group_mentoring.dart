@@ -52,7 +52,7 @@ class _DataGroupMentorPageState extends State<DataGroupMentorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Data Group Mentor"),
+        title: Text("Data Group Mentor",style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 51, 148, 91),
       ),
       body: Center(

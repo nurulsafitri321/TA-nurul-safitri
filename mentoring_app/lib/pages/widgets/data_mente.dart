@@ -34,7 +34,7 @@ class _DataMenteePageState extends State<DataMenteePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Data Mentee"),
+        title: Text("Data Mentee",style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 51, 148, 91),
       ),
       body: Center(

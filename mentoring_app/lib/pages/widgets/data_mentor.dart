@@ -31,10 +31,16 @@ class _DataMentorPageState extends State<DataMentorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Data Mentor"),
-        backgroundColor: Color.fromARGB(255, 51, 148, 91),
+          appBar: AppBar(
+      title: Text(
+        "Data Group Mentor",style: TextStyle(color: Colors.white),
       ),
+      backgroundColor: Color.fromARGB(255, 51, 148, 91),
+      iconTheme: IconThemeData(
+        color: Colors.white, // Ubah warna ikon kembali menjadi putih
+      ),
+    ),
+
       body: Center(
         child: FutureBuilder<List<Mentor>>(
           future: futureMentors,

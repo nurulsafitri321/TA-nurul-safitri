@@ -65,7 +65,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green,
+        selectedItemColor: const Color.fromARGB(255, 51, 148, 91),
         unselectedItemColor: Colors.grey, // Set the unselected icon color to grey
         onTap: (index) {
           print('BottomNavigationBar tapped, index: $index'); // Debug print

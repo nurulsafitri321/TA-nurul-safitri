@@ -49,7 +49,7 @@ class _ControllerPageState extends State<ControllerPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("Semoga Allah mudahkan jalan mu di setiap langkah!"),
-        backgroundColor: Colors.green, // Mengubah warna latar belakang notifikasi
+        backgroundColor: const Color.fromARGB(255, 51, 148, 91), // Mengubah warna latar belakang notifikasi
         duration: Duration(seconds: 3),
       ),
     );
