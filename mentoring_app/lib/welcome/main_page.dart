@@ -24,22 +24,13 @@ class _MainPageState extends State<MainPage> {
   ];
 
   void _onItemTapped(int index) {
-    print('Navigating to index: $index'); // Print statement for debugging
     setState(() {
       _selectedIndex = index;
-      print('Updated selectedIndex: $_selectedIndex'); // Print statement for debugging
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('Building MainPage with selectedIndex: $_selectedIndex'); // Print statement for debugging
-
-    // Debugging to check for null widgets
-    for (int i = 0; i < _pages.length; i++) {
-      print('Page $i is ${_pages[i] != null ? 'not null' : 'null'}');
-    }
-
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -66,11 +57,8 @@ class _MainPageState extends State<MainPage> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: const Color.fromARGB(255, 51, 148, 91),
-        unselectedItemColor: Colors.grey, // Set the unselected icon color to grey
-        onTap: (index) {
-          print('BottomNavigationBar tapped, index: $index'); // Debug print
-          _onItemTapped(index);
-        },
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
       ),
     );
   }

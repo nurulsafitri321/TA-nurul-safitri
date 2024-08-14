@@ -2,7 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:provider/provider.dart';
+import 'package:mentoring_app/models/user_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -31,15 +32,17 @@ class _ProfilePageState extends State<ProfilePage> {
     localStorage.remove('token');
     localStorage.remove('user_name');
     localStorage.remove('user_email');
-    Navigator.pushReplacementNamed(context, '/login'); // Make sure there is a route for login
+    Navigator.pushReplacementNamed(context, '/login'); // Pastikan ada route untuk login
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile Page"),backgroundColor: const Color.fromARGB(255, 51, 148, 91),
-        
+        title: Text("Profile Page"),
+        backgroundColor: const Color.fromARGB(255, 51, 148, 91),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -62,13 +65,15 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 20),
             TextField(
+              controller: TextEditingController(text: user?.name ?? ''),
               decoration: InputDecoration(
-                labelText: "Name",
+                labelText: "Nama",
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 20),
             TextField(
+              controller: TextEditingController(text: user?.email ?? ''),
               decoration: InputDecoration(
                 labelText: "Email",
                 border: OutlineInputBorder(),
@@ -76,24 +81,23 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-            onPressed: () => _logout(context),
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: Color.fromARGB(255, 51, 148, 91), // Warna putih untuk teks
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25), // Radius border
+              onPressed: () => _logout(context),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, backgroundColor: Color.fromARGB(255, 51, 148, 91), // Warna putih untuk teks
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25), // Radius border
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding
               ),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding
-            ),
-            child: Text(
-              "Logout",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              child: Text(
+                "Logout",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-
           ],
         ),
       ),

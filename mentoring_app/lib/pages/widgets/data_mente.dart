@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:mentoring_app/models/mente_model.dart';
 
-
 class DataMenteePage extends StatefulWidget {
   @override
   _DataMenteePageState createState() => _DataMenteePageState();
@@ -34,7 +33,7 @@ class _DataMenteePageState extends State<DataMenteePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Data Mentee",style: TextStyle(color: Colors.white)),
+        title: Text("Data Mentee", style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 51, 148, 91),
       ),
       body: Center(
@@ -51,27 +50,34 @@ class _DataMenteePageState extends State<DataMenteePage> {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
+                  final mentee = snapshot.data![index];
                   return Card(
                     elevation: 5,
                     margin: EdgeInsets.all(10),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
-                        title: Text(snapshot.data![index].nama),
+                        title: Text(mentee.nama),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("NIM: ${snapshot.data![index].nim}"),
-                            Text("Kelas: ${snapshot.data![index].kelas}"),
-                            Text("Jurusan: ${snapshot.data![index].jurusan}"),
-                            Text("Prodi: ${snapshot.data![index].prodi}"),
-                            Text("Jenis Kelamin: ${snapshot.data![index].jenisKelamin}"),
-                            Text("Status Mentoring: ${snapshot.data![index].statusMentoring}"),
-                            Text("Kehadiran: ${snapshot.data![index].kehadiran}"),
-                            Text("Amalan: ${snapshot.data![index].amalan}"),
-                            Text("Keaktifan: ${snapshot.data![index].keaktifan}"),
-                            Text("Pengetahuan: ${snapshot.data![index].pengetahuan}"),
-                            Text("Nilai Akhir: ${snapshot.data![index].nilaiAkhir}"),
+                            Text("NIM: ${mentee.nim}"),
+                            Text("Kelas: ${mentee.kelas}"),
+                            Text("Jurusan: ${mentee.jurusan}"),
+                            Text("Prodi: ${mentee.prodi}"),
+                            Text("Jenis Kelamin: ${mentee.jenisKelamin}"),
+                            Text("Status Mentoring: ${mentee.statusMentoring.toString().split('.').last}"),
+                            Text("Kehadiran: ${mentee.kehadiran.toString()}%"),
+                            Text("Amalan: ${mentee.amalan.toString()}%"),
+                            Text("Keaktifan: ${mentee.keaktifan.toString()}%"),
+                            Text("Pengetahuan: ${mentee.pengetahuan.toString()}%"),
+                            Text("Nilai Akhir: ${mentee.nilaiAkhir.toString()}%"),
+                            Text("Ujian Praktek: ${mentee.ujianPraktek.toString().split('.').last}"),
+                            Text("Ujian Tulis: ${mentee.ujianTulis ? 'Ya' : 'Tidak'}"),
+                            // Menggunakan loop untuk menampilkan pertemuan
+                            for (int i = 0; i < mentee.pertemuan.length; i++)
+                              Text("Pertemuan ${i + 1}: ${mentee.pertemuan[i] ? 'Hadir' : 'Tidak Hadir'}"),
+                            Text("Catatan: ${mentee.catatan ?? 'Tidak ada catatan'}"),
                           ],
                         ),
                       ),

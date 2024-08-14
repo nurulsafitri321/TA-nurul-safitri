@@ -41,12 +41,14 @@ class PPTPage extends StatelessWidget {
                     SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () async {
-                        const url = 'https://www.canva.com/design/DAGM_xUwdEo/asH8gNVvXOaS8ekjOfrmbw/edit';
+                        const url ='https://balsamiq.cloud/sxd3ux2/pn33z2x/rF4E1';
+                        final uri = Uri.parse(url);
+
                         print('Attempting to launch $url');
-                        if (await canLaunchUrl(Uri.parse(url))) {
+                        if (await canLaunchUrl(uri)) {
                           print('Launching $url');
                           await launchUrl(
-                            Uri.parse(url),
+                            uri,
                             mode: LaunchMode.externalApplication,
                           );
                         } else {
