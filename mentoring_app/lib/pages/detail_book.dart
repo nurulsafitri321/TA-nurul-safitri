@@ -77,7 +77,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
                           fontSize: 30,
                         ),
                         TextWidget(
-                          text: "Author: ${widget.articleInfo.author}",
+                          text: "Lembaga: ${widget.articleInfo.author}",
                           fontSize: 20,
                           color: Color(0xFF7b8ea3),
                         ),
@@ -129,7 +129,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
             Row(
               children: [
                 TextWidget(
-                  text: "Details",
+                  text: "Daftar Isi",
                   fontSize: 30,
                 ),
                 Expanded(child: Container()),
@@ -162,7 +162,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
                 child: Row(
                   children: [
                     TextWidget(
-                      text: "Check the directory",
+                      text: "Lihat directory",
                       fontSize: 20,
                     ),
                     Expanded(child: Container()),
@@ -176,15 +176,15 @@ class _DetailBookPageState extends State<DetailBookPage> {
             ),
             Divider(color: Color(0xFF7b8ea3)),
             SizedBox(height: 30), // Jarak antara elemen
-            ElevatedButton(
-              onPressed: () {
-                // Tambahkan logika untuk membuka PDF atau melakukan tindakan lain
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 54, 141, 57), // Warna teks putih
-              ),
-              child: Text("Baca"),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // Tambahkan logika untuk membuka PDF atau melakukan tindakan lain
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 54, 141, 57), // Warna teks putih
+            //   ),
+            //   child: Text("Baca"),
+            // ),
           ],
         ),
       ),

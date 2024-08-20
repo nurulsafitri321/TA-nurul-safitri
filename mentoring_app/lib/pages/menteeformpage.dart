@@ -4,8 +4,9 @@ import 'package:mentoring_app/service/mente_service.dart';
 
 class MenteeFormPage extends StatefulWidget {
   final Mentee? mentee;
+  final int idMentor; // Ubah idMentor menjadi int
 
-  const MenteeFormPage({Key? key, this.mentee}) : super(key: key);
+  const MenteeFormPage({Key? key, this.mentee, required this.idMentor}) : super(key: key);
 
   @override
   _MenteeFormPageState createState() => _MenteeFormPageState();
@@ -15,16 +16,15 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
   final _formKey = GlobalKey<FormState>();
   final MenteeService _menteeService = MenteeService();
 
-  // Inisialisasi semua controller
   late TextEditingController _namaController;
   late TextEditingController _nimController;
   late TextEditingController _kelasController;
   late TextEditingController _jurusanController;
   late TextEditingController _prodiController;
   late TextEditingController _catatanController;
+  late TextEditingController _idMentorController; // Tambahkan controller untuk idMentor
 
   late String _jenisKelamin;
-  late int _idMentor;
   late String _statusMentoring;
   late List<bool> _pertemuan;
   late String _ujianPraktek;
@@ -40,45 +40,79 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
   List<String> _ujianPraktekItems = ['solat wajib', 'solat jenazah'];
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
 
-    // Inisialisasi controller di dalam initState
-    _namaController = TextEditingController(text: widget.mentee?.nama ?? '');
-    _nimController = TextEditingController(text: widget.mentee?.nim ?? '');
-    _kelasController = TextEditingController(text: widget.mentee?.kelas ?? '');
-    _jurusanController = TextEditingController(text: widget.mentee?.jurusan ?? '');
-    _prodiController = TextEditingController(text: widget.mentee?.prodi ?? '');
-    _catatanController = TextEditingController(text: widget.mentee?.catatan ?? '');
+  _namaController = TextEditingController(text: widget.mentee?.nama ?? '');
+  _nimController = TextEditingController(text: widget.mentee?.nim ?? '');
+  _kelasController = TextEditingController(text: widget.mentee?.kelas ?? '');
+  _jurusanController = TextEditingController(text: widget.mentee?.jurusan ?? '');
+  _prodiController = TextEditingController(text: widget.mentee?.prodi ?? '');
+  _catatanController = TextEditingController(text: widget.mentee?.catatan ?? '');
+  _idMentorController = TextEditingController(text: widget.idMentor.toString());
 
-    _jenisKelamin = widget.mentee?.jenisKelamin ?? _jenisKelaminItems.first;
-    _idMentor = widget.mentee?.idMentor ?? 0;
-    _statusMentoring = widget.mentee?.statusMentoring.toString().split('.').last ?? _statusMentoringItems.first;
-    _pertemuan = widget.mentee?.pertemuan ?? List.generate(10, (_) => false);
-    _ujianPraktek = widget.mentee?.ujianPraktek.toString().split('.').last ?? _ujianPraktekItems.first;
-    _ujianTulis = widget.mentee?.ujianTulis ?? false;
-    _kehadiran = widget.mentee?.kehadiran ?? 0.0;
-    _amalan = widget.mentee?.amalan ?? 0.0;
-    _keaktifan = widget.mentee?.keaktifan ?? 0.0;
-    _pengetahuan = widget.mentee?.pengetahuan ?? 0.0;
-    _nilaiAkhir = widget.mentee?.nilaiAkhir ?? 0.0;
-  }
+  // Pastikan nilai dropdown valid
+  _jenisKelamin = _jenisKelaminItems.contains(widget.mentee?.jenisKelamin)
+      ? widget.mentee?.jenisKelamin ?? _jenisKelaminItems.first
+      : _jenisKelaminItems.first;
+
+  _statusMentoring = _statusMentoringItems.contains(widget.mentee?.statusMentoring.toString().split('.').last)
+      ? widget.mentee?.statusMentoring.toString().split('.').last ?? _statusMentoringItems.first
+      : _statusMentoringItems.first;
+
+  _ujianPraktek = _ujianPraktekItems.contains(widget.mentee?.ujianPraktek.toString().split('.').last)
+      ? widget.mentee?.ujianPraktek.toString().split('.').last ?? _ujianPraktekItems.first
+      : _ujianPraktekItems.first;
+
+  _pertemuan = widget.mentee?.pertemuan ?? List.generate(10, (_) => false);
+  _ujianTulis = widget.mentee?.ujianTulis ?? false;
+  _kehadiran = widget.mentee?.kehadiran ?? 0.0;
+  _amalan = widget.mentee?.amalan ?? 0.0;
+  _keaktifan = widget.mentee?.keaktifan ?? 0.0;
+  _pengetahuan = widget.mentee?.pengetahuan ?? 0.0;
+  _nilaiAkhir = widget.mentee?.nilaiAkhir ?? 0.0;
+}
+
+Widget _buildDropdown<T>(String label, List<T> items, T value, Function(T) onChanged) {
+  return DropdownButtonFormField<T>(
+    decoration: InputDecoration(labelText: label),
+    value: items.contains(value) ? value : null,  // Validasi value agar pasti ada di items
+    items: items.map((T item) {
+      return DropdownMenuItem<T>(
+        value: item,
+        child: Text(item.toString()),
+      );
+    }).toList(),
+    onChanged: (T? newValue) {
+      if (newValue != null) {
+        onChanged(newValue);
+      }
+    },
+    validator: (value) {
+      if (value == null) {
+        return 'Field ini tidak boleh kosong';
+      }
+      return null;
+    },
+  );
+}
+
 
   @override
   void dispose() {
-    // Jangan lupa untuk dispose controller untuk menghindari kebocoran memori
     _namaController.dispose();
     _nimController.dispose();
     _kelasController.dispose();
     _jurusanController.dispose();
     _prodiController.dispose();
     _catatanController.dispose();
+    _idMentorController.dispose(); // Pastikan untuk dispose idMentorController
     super.dispose();
   }
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Menyusun data yang akan dikirim ke Laravel
+      // Simpan data setelah validasi
       Map<String, dynamic> data = {
         'nama': _namaController.text,
         'nim': _nimController.text,
@@ -86,7 +120,6 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
         'jurusan': _jurusanController.text,
         'prodi': _prodiController.text,
         'jenis_kelamin': _jenisKelamin,
-        'id_mentor': _idMentor,
         'status_mentoring': _statusMentoring,
         'ujian_praktek': _ujianPraktek,
         'ujian_tulis': _ujianTulis,
@@ -96,9 +129,10 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
         'pengetahuan': _pengetahuan,
         'nilai_akhir': _nilaiAkhir,
         'catatan': _catatanController.text,
+        'id_mentor': int.parse(_idMentorController.text), // Konversi dari String ke int
       };
 
-      // Menambahkan field pertemuan secara dinamis
+      // Menambahkan data pertemuan
       for (int i = 0; i < _pertemuan.length; i++) {
         data['pertemuan_${i + 1}'] = _pertemuan[i];
       }
@@ -106,15 +140,20 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
       try {
         Mentee savedMentee;
         if (widget.mentee == null) {
-          savedMentee = await _menteeService.createMentee(data);  // Mengirim data ke server
+          // Membuat mentee baru
+          savedMentee = await _menteeService.createMentee(data);
         } else {
-          await _menteeService.updateMentee(data);  // Mengupdate data di server
-          savedMentee = Mentee.fromJson(data);  // Gunakan existing mentee jika update
+          // Mengupdate mentee yang sudah ada menggunakan NIM
+          await _menteeService.updateMentee(widget.mentee!.nim, data);
+          savedMentee = Mentee.fromJson(data);
         }
+
+        // Navigasi kembali ke layar sebelumnya dengan mentee yang disimpan
         Navigator.pop(context, savedMentee);
       } catch (e) {
+        // Tampilkan pesan error jika penyimpanan gagal
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to save mentee: $e')),
+          SnackBar(content: Text('Gagal untuk menyimpan data mentee: $e')),
         );
       }
     }
@@ -125,7 +164,6 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.mentee == null ? 'Tambah Mentee' : 'Edit Mentee'),
-        backgroundColor: const Color.fromARGB(255, 51, 148, 91),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -139,7 +177,6 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
               _buildTextField('Jurusan', _jurusanController),
               _buildTextField('Prodi', _prodiController),
               _buildDropdown<String>('Jenis Kelamin', _jenisKelaminItems, _jenisKelamin, (value) => setState(() => _jenisKelamin = value)),
-              _buildNumberField('ID Mentor', _idMentor.toString(), (value) => setState(() => _idMentor = int.parse(value))),
               _buildDropdown<String>('Status Mentoring', _statusMentoringItems, _statusMentoring, (value) => setState(() => _statusMentoring = value)),
               _buildDropdown<String>('Ujian Praktek', _ujianPraktekItems, _ujianPraktek, (value) => setState(() => _ujianPraktek = value)),
               _buildCheckboxList('Pertemuan', _pertemuan),
@@ -150,6 +187,7 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
               _buildNumberField('Pengetahuan (%)', _pengetahuan.toString(), (value) => setState(() => _pengetahuan = double.parse(value))),
               _buildNumberField('Nilai Akhir (%)', _nilaiAkhir.toString(), (value) => setState(() => _nilaiAkhir = double.parse(value))),
               _buildTextField('Catatan', _catatanController),
+              _buildTextField('ID Mentor', _idMentorController), // Tampilkan ID Mentor
               ElevatedButton(
                 onPressed: _submitForm,
                 child: Text(widget.mentee == null ? 'Simpan' : 'Update'),
@@ -184,50 +222,59 @@ class _MenteeFormPageState extends State<MenteeFormPage> {
         if (value == null || value.isEmpty) {
           return 'Field ini tidak boleh kosong';
         }
-        if (double.tryParse(value) == null) {
-          return 'Masukkan angka yang valid';
-        }
         return null;
       },
     );
   }
 
-  Widget _buildDropdown<T>(String label, List<T> items, T selectedItem, ValueChanged<T> onChanged) {
-  return DropdownButtonFormField<T>(
-    decoration: InputDecoration(labelText: label),
-    value: selectedItem,
-    items: items.map((item) => DropdownMenuItem<T>(value: item, child: Text(item.toString()))).toList(),
-    onChanged: (value) {
-      if (value != null) {
-        onChanged(value);
-      }
-    }, // Menghindari null pada onChanged
-  );
-}
+  // Widget _buildDropdown<T>(String label, List<T> items, T value, Function(T) onChanged) {
+  //   return DropdownButtonFormField<T>(
+  //     decoration: InputDecoration(labelText: label),
+  //     value: value,
+  //     items: items.map((T item) {
+  //       return DropdownMenuItem<T>(
+  //         value: item,
+  //         child: Text(item.toString()),
+  //       );
+  //     }).toList(),
+  //     onChanged: (T? newValue) {
+  //       if (newValue != null) {
+  //         onChanged(newValue);
+  //       }
+  //     },
+  //     validator: (value) {
+  //       if (value == null) {
+  //         return 'Field ini tidak boleh kosong';
+  //       }
+  //       return null;
+  //     },
+  //   );
+  // }
+  
 
-
-  Widget _buildCheckboxList(String label, List<bool> items) {
+  Widget _buildCheckboxList(String label, List<bool> values) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label),
-        ...List.generate(
-          items.length,
-          (index) => CheckboxListTile(
-            title: Text('Pertemuan ${index + 1}'),
-            value: items[index],
-            onChanged: (bool? value) {
-              setState(() {
-                items[index] = value ?? false;
-              });
-            },
-          ),
+        Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+        Column(
+          children: List.generate(values.length, (index) {
+            return CheckboxListTile(
+              title: Text('Pertemuan ${index + 1}'),
+              value: values[index],
+              onChanged: (bool? value) {
+                setState(() {
+                  values[index] = value!;
+                });
+              },
+            );
+          }),
         ),
       ],
     );
   }
 
-  Widget _buildSwitch(String label, bool value, ValueChanged<bool> onChanged) {
+  Widget _buildSwitch(String label, bool value, Function(bool) onChanged) {
     return SwitchListTile(
       title: Text(label),
       value: value,

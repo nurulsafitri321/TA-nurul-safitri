@@ -52,7 +52,7 @@ class _DataGroupMentorPageState extends State<DataGroupMentorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Data Group Mentor",style: TextStyle(color: Colors.white)),
+        title: Text("Data Group Mentoring",style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 51, 148, 91),
       ),
       body: Center(
@@ -94,88 +94,7 @@ class _DataGroupMentorPageState extends State<DataGroupMentorPage> {
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            decoration: InputDecoration(labelText: "Nama Kelompok"),
-                            onSaved: (value) => namaKelompok = value!,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter nama kelompok';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(labelText: "Nama Mentor"),
-                            onSaved: (value) => namaMentor = value!,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter nama mentor';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(labelText: "No HP Mentor"),
-                            onSaved: (value) => noHpMentor = value!,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter no HP mentor';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(labelText: "Nama Mente"),
-                            onSaved: (value) => namaMente = value!,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter nama mente';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(labelText: "Jurusan Mente"),
-                            onSaved: (value) => jurusanMente = value!,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter jurusan mente';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
-                                GroupMentoring newGroup = GroupMentoring(
-                                  id: 0,
-                                  namaKelompok: namaKelompok,
-                                  namaMentor: namaMentor,
-                                  noHpMentor: noHpMentor,
-                                  namaMente: namaMente,
-                                  jurusanMente: jurusanMente,
-                                );
-                                createGroupMentoring(newGroup).then((group) {
-                                  setState(() {
-                                    futureGroups = fetchGroups();
-                                  });
-                                });
-                              }
-                            },
-                            child: Text("Create Group Mentoring"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  
                 ],
               );
             }

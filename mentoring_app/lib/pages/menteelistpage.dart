@@ -11,7 +11,7 @@ class MenteeListPage extends StatefulWidget {
 
 class _MenteeListPageState extends State<MenteeListPage> {
   final MenteeService _menteeService = MenteeService();
-  List<Mentee> _mentees = [];
+  List<Mentee> mentees = [];
 
   @override
   void initState() {
@@ -20,49 +20,103 @@ class _MenteeListPageState extends State<MenteeListPage> {
   }
 
   Future<void> _fetchMentees() async {
-    final mentees = await _menteeService.getMentees();
+    try {
+      List<Mentee> fetchedMentees = await _menteeService.getMentees();
+      setState(() {
+        mentees = fetchedMentees;
+      });
+    } catch (e) {
+      print('Failed to load mentees: $e');
+    }
+  }
+
+  void _addMentee(Mentee mentee) {
     setState(() {
-      _mentees = mentees;
+      mentees.add(mentee);
     });
   }
+
+  void _editMentee(String nim, Mentee updatedMentee) {
+    setState(() {
+      int index = mentees.indexWhere((mentee) => mentee.nim == nim);
+      if (index != -1) {
+        mentees[index] = updatedMentee;
+      }
+    });
+  }
+
+  void _deleteMentee(String nim) async {
+    try {
+      await _menteeService.deleteMentee(nim);
+      setState(() {
+        mentees.removeWhere((mentee) => mentee.nim == nim);
+      });
+    } catch (e) {
+      print('Failed to delete mentee: $e');
+    }
+  }
+
+  void _openMenteeForm([Mentee? mentee]) async {
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => MenteeFormPage(
+        mentee: mentee,
+        idMentor: mentee?.idMentor ?? 0, // Ubah dari '' menjadi nilai idMentor atau default 0
+      ),
+    ),
+  );
+
+  if (result != null && result is Mentee) {
+    if (mentee == null) {
+      _addMentee(result);
+    } else {
+      _editMentee(mentee.nim, result);
+    }
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daftar Mentee'),
-        backgroundColor: const Color.fromARGB(255, 51, 148, 91),
+      automaticallyImplyLeading: false, // Menghilangkan icon back
+      backgroundColor: Color.fromARGB(255, 232, 243, 232), // Memberikan background hijau tipis
+      title: Text(
+        'Daftar Mentee',
+        style: TextStyle(
+          fontWeight: FontWeight.bold, // Membuat teks menjadi bold
+          color: const Color.fromARGB(255, 51, 148, 91), // Mengubah warna teks menjadi hijau
+        ),
       ),
-      body: _mentees.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _mentees.length,
-              itemBuilder: (context, index) {
-                final mentee = _mentees[index];
-                return ListTile(
-                  title: Text(mentee.nama),
-                  subtitle: Text(mentee.nim),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MenteeFormPage(mentee: mentee),
-                      ),
-                    ).then((_) => _fetchMentees());
-                  },
-                );
-              },
+    ),
+
+      body: ListView.builder(
+        itemCount: mentees.length,
+        itemBuilder: (context, index) {
+          Mentee mentee = mentees[index];
+          return ListTile(
+            title: Text(mentee.nama),
+            subtitle: Text('NIM: ${mentee.nim}, Kelas: ${mentee.kelas}'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () => _openMenteeForm(mentee),
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => _deleteMentee(mentee.nim),
+                ),
+              ],
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MenteeFormPage()),
           );
-          if (result != null) {
-            _fetchMentees(); // Refresh daftar mentee setelah menambah atau mengedit mentee
-          }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _openMenteeForm(),
         child: Icon(Icons.add),
       ),
     );

@@ -90,24 +90,27 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
             ),
             _buildRow([
-              DotsIndicator(
-                dotsCount: _totalDots,
-                position: _currentPosition.toInt(),
-                axis: Axis.horizontal,
-                decorator: DotsDecorator(
-                  size: Size.square(9.0),
-                  activeSize: Size(18.0, 9.0),
-                  activeShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                ),
-                onTap: (pos) {
-                  setState(() {
-                    _currentPosition = pos.toInt();
-                  });
-                },
-              ),
-            ]),
+  DotsIndicator(
+    dotsCount: _totalDots,
+    position: _currentPosition.toInt(),
+    axis: Axis.horizontal,
+    decorator: DotsDecorator(
+      color: Color.fromARGB(255, 196, 188, 188),
+      activeColor: Colors.white, // Warna dots aktif menjadi putih
+      size: Size.square(9.0),
+      activeSize: Size(18.0, 9.0),
+      activeShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+    ),
+    onTap: (pos) {
+      setState(() {
+        _currentPosition = pos.toInt();
+      });
+    },
+  ),
+]),
+
             Container(
               height: 180,
               color: Color.fromARGB(255, 51, 148, 91),

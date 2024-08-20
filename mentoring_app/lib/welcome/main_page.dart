@@ -43,12 +43,12 @@ class _MainPageState extends State<MainPage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.create),
             label: 'Controller',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.picture_as_pdf),
-            label: 'PPT',
+            label: 'Baca',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

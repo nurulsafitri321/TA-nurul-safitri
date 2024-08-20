@@ -33,7 +33,7 @@ class _DataMentorPageState extends State<DataMentorPage> {
     return Scaffold(
           appBar: AppBar(
       title: Text(
-        "Data Group Mentor",style: TextStyle(color: Colors.white),
+        "Data Mentor",style: TextStyle(color: Colors.white),
       ),
       backgroundColor: Color.fromARGB(255, 51, 148, 91),
       iconTheme: IconThemeData(

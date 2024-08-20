@@ -8,6 +8,10 @@ import 'package:mentoring_app/navbar/controling/widget/hafalan_screen.dart';
 import 'package:mentoring_app/navbar/controling/widget/materi_screen.dart';
 import 'package:mentoring_app/navbar/controling/widget/presesnsi_screen.dart';
 import 'package:mentoring_app/navbar/controling/widget/ujian_mentoring.dart';
+import 'package:mentoring_app/navbar/home_page/profile_lrai/Tentang_m2ss.dart';
+import 'package:mentoring_app/navbar/home_page/profile_lrai/tentang_danus.dart';
+import 'package:mentoring_app/navbar/home_page/profile_lrai/tentang_hrd.dart';
+import 'package:mentoring_app/navbar/home_page/profile_lrai/tentang_mai.dart';
 import 'package:mentoring_app/pages/detail_book.dart';
 import 'package:mentoring_app/pages/widgets/CalendarWidget.dart';
 import 'package:mentoring_app/pages/widgets/CircleButton.dart';
@@ -16,6 +20,7 @@ import 'package:mentoring_app/pages/widgets/data_group_mentoring.dart';
 import 'package:mentoring_app/pages/widgets/data_mente.dart';
 import 'package:mentoring_app/pages/widgets/data_mentor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ArticlePage extends StatefulWidget {
   const ArticlePage({super.key});
@@ -42,17 +47,20 @@ class _ArticlePageState extends State<ArticlePage> {
   }
 
   _initData() async {
-    await CallApi().getPublicData("allarticles").then((response) {
-      if (response != null && response.body != null) {
+  await CallApi().getPublicData("allarticles").then((response) {
+    if (response != null && response.body != null) {
+      if (mounted) {  // Check if the widget is still mounted
         setState(() {
           Iterable list = json.decode(response.body);
           allarticles = list.map((model) => ArticleInfo.fromJson(model)).toList();
         });
-      } else {
-        print('Response is null');
       }
-    });
-  }
+    } else {
+      print('Response is null');
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -97,77 +105,67 @@ class _ArticlePageState extends State<ArticlePage> {
             ),
             SizedBox(height: height * 0.02),
             Container(
-              padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextWidget(
-                    text: "Pengelolaan Mentoring", 
-                    fontSize: 20, 
-                    color: Color.fromARGB(255, 51, 148, 91),
-                  ),
-                ],
-              ),
+            padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextWidget(
+                  text: "Divisi LRAI Pnp",
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 51, 148, 91),
+                ),
+              ],
             ),
-          
+          ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CircleButton(
-                    icon: Icons.calendar_today,
-                    label: 'Kehadiran',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PresensiScreen()),
-                      );
-                    },
-                  ),
-                  CircleButton(
-                    icon: Icons.book,
-                    label: 'Materi',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MateriScreen()),
-                      );
-                    },
-                  ),
-                  CircleButton(
-                    icon: Icons.favorite,
-                    label: 'Amal Yaumi',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AmalYaumiScreen()),
-                      );
-                    },
-                  ),
-                  CircleButton(
-                    icon: Icons.memory,
-                    label: 'Hafalan',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HafalanScreen()),
-                      );
-                    },
-                  ),
-                  CircleButton(
-                    icon: Icons.school,
-                    label: 'Ujian',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UjianMentoring()),
-                      );
-                    },
-                  ),
-                ],
-              ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CircleButton(
+                  icon: Icons.person_add_alt_1, // Ikon yang lebih sesuai untuk HRD
+                  label: 'HRD',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const tentang_hrd()),
+                    );
+                  },
+                ),
+                CircleButton(
+                  icon: Icons.admin_panel_settings, // Ikon yang lebih sesuai untuk MAI
+                  label: 'MAI',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const tentang_mai()),
+                    );
+                  },
+                ),
+                CircleButton(
+                  icon: Icons.attach_money, // Ikon yang lebih sesuai untuk DANUS
+                  label: 'HUDAS',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const tentang_danus()),
+                    );
+                  },
+                ),
+                CircleButton(
+                  icon: Icons.art_track, // Ikon yang lebih sesuai untuk M2SS (Media Pengeditan)
+                  label: 'M2SS',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const tentang_m2ss()),
+                    );
+                  },
+                ),
+              ],
             ),
+          ),
+
             SizedBox(height: height * 0.02),
             CustomPaint(
               size: Size(double.infinity, 1),
@@ -257,7 +255,86 @@ class _ArticlePageState extends State<ArticlePage> {
               },
             ),
           ),
+          
           CustomPaint(
+              size: Size(double.infinity, 1),
+              painter: DashedLinePainter(),
+            ),
+            SizedBox(height: height * 0.02),
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextWidget(
+                    text: "Pengelolaan Mentoring", 
+                    fontSize: 20, 
+                    color: Color.fromARGB(255, 51, 148, 91),
+                  ),
+                ],
+              ),
+            ),
+          
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CircleButton(
+                    icon: Icons.calendar_today,
+                    label: 'Kehadiran',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PresensiScreen()),
+                      );
+                    }, 
+                  ),
+                  CircleButton(
+                    icon: Icons.book,
+                    label: 'Materi',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MateriScreen()),
+                      );
+                    }, 
+                  ),
+                  CircleButton(
+                    icon: Icons.favorite,
+                    label: 'Amal Yaumi',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AmalYaumiScreen()),
+                      );
+                    },
+                  ),
+                  CircleButton(
+                    icon: Icons.memory,
+                    label: 'Hafalan',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HafalanScreen()),
+                      );
+                    }, 
+                  ),
+                  CircleButton(
+                    icon: Icons.school,
+                    label: 'Ujian',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UjianMentoring()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: height * 0.02),
+            CustomPaint(
             size: Size(double.infinity, 1),
             painter: DashedLinePainter(),
           ),
@@ -472,4 +549,3 @@ class _ArticlePageState extends State<ArticlePage> {
     );
   }
 }
-

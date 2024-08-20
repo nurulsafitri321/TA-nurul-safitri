@@ -9,6 +9,7 @@ enum UjianPraktek {
 }
 
 class Mentee {
+  final int id; // Tambahan id sebagai primary key
   final int idMentor;
   final String nama;
   final String nim;
@@ -28,6 +29,7 @@ class Mentee {
   final String? catatan;
 
   Mentee({
+    required this.id, // Id juga perlu diinisialisasi
     required this.idMentor,
     required this.nama,
     required this.nim,
@@ -49,6 +51,7 @@ class Mentee {
 
   factory Mentee.fromJson(Map<String, dynamic> json) {
     return Mentee(
+      id: json['id'], // Parsing id dari JSON
       idMentor: json['id_mentor'],
       nama: json['nama'] ?? '',
       nim: json['nim'] ?? '',
@@ -77,6 +80,7 @@ class Mentee {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id, // Menambahkan id ke dalam map JSON
       'id_mentor': idMentor,
       'nama': nama,
       'nim': nim,
